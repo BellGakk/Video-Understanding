@@ -1,0 +1,23 @@
+img = eye(512);
+[m,n] = size(img);
+for i=1:m
+    for j=1:n
+        img(i,j) = sin(0.2*i) + sin(0.3*i) + cos(0.4*i) + sin(0.15*sqrt(i^2 + j^2)) + sin(0.35*sqrt(i^2+j^2));
+    end
+end
+
+f=fft2(img);        
+f=fftshift(f);      
+r=real(f);          
+i=imag(f);         
+margin=log(abs(f));      
+phase=log(angle(f)*180/pi); 
+l=log(f);           
+subplot(2,2,1),imshow(img),title('Original Image');
+subplot(2,2,2),imshow(margin,[]),title('Magnitude');
+subplot(2,2,3),imshow(phase,[]),title('Phase');
+
+margin = 2 * margin;
+Inverse = real(ifft2(ifftshift(margin)));
+ret=im2uint8(mat2gray(Inverse));
+subplot(2,2,4);imshow(ret),title('Inverse DFT');
